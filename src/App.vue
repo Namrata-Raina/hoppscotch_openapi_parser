@@ -1,15 +1,43 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  
+  <div>
+    <h1>Testing Bed</h1>
+  </div>
+
+  <div>
+    <div>
+      <h2>Input</h2>
+      <textarea v-model="inputvalue"></textarea>
+    </div>
+    <div>
+      <h2>Output</h2>
+      <textarea v-model="outputvalue"></textarea>
+    </div>
+  </div>
+
+  <div>
+    <button @click='submit'>Submit</button>
+  </div>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Parser from './helpers/openAPIParser';
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    
+  },
+  data() {
+    return {
+      inputvalue:'',
+      outputvalue:''
+    } 
+  },
+  methods: {
+    submit(){
+      this.outputvalue = JSON.stringify(Parser(JSON.parse(this.inputvalue)));
+    }
   }
 }
 </script>
@@ -20,7 +48,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #ffffff;
   margin-top: 60px;
+  margin-bottom: 60px;
+  margin-right: 60px;
+  margin-left: 60px;
+  background: #808080;
+  height: 600px
 }
 </style>
