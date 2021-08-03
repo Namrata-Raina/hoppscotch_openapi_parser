@@ -1,10 +1,9 @@
 import { OpenAPIV3 } from "openapi-types"
-import { isRef } from "vue"
 
 let components : OpenAPIV3.ComponentsObject = {}
 
 function isOperationType(object: any): object is OpenAPIV3.OperationObject {
-  return true
+  return object["responses"] ? true : false
 }
 
 function isRequestBodyType(object: any): object is OpenAPIV3.RequestBodyObject {
@@ -17,16 +16,16 @@ function isParameterType(object: any): object is OpenAPIV3.ParameterObject {
 
 const isSchemaObjectType = (object: any) : object is OpenAPIV3.SchemaObject => true
 const isResponseObjectType = (object: any) : object is OpenAPIV3.ResponseObject => true
-const isExampleObjectType = (object: any) : object is OpenAPIV3.ExampleObject => true
+const isExampleObjectType = (object: any) : object is OpenAPIV3.ExampleObject => object['value'] ? true : false
 const isParameterObjectType = (object: any) : object is OpenAPIV3.ParameterObject => true
-const isRequestBodyObjectType = (object: any) : object is OpenAPIV3.RequestBodyObject => true
+const isRequestBodyObjectType = (object: any) : object is OpenAPIV3.RequestBodyObject => object["content"] ? true : false
 const isHeaderObjectType = (object: any) : object is OpenAPIV3.HeaderObject => true
 const isSecuritySchemeObjectType = (object: any) : object is OpenAPIV3.SecuritySchemeObject => true
 const isLinkObjectType = (object: any) : object is OpenAPIV3.LinkObject => true
 const isCallbackObjectType = (object: any) : object is OpenAPIV3.CallbackObject => true
 
 
-const isReferenceObjectType = (object: any) : object is OpenAPIV3.ReferenceObject => true
+const isReferenceObjectType = (object: any) : object is OpenAPIV3.ReferenceObject => object["$ref"] ? true : false
 
 function fetchComponent(
   child : "schemas" | "responses" | "parameters" | "examples" | "requestBodies" | "headers" | "securitySchemes" | "links" | "callbacks",
@@ -40,46 +39,6 @@ function fetchComponent(
 
   if(isReferenceObjectType(component)) {
     component = fetchComponent(child, component["$ref"]?.split('/').pop() ?? "")
-  }
-
-  switch(child) {
-    case 'schemas':
-      component = isSchemaObjectType(component) ? component : null;
-      break;
-
-    case 'responses':
-      component = isResponseObjectType(component) ? component : null;
-      break;
-
-    case 'parameters':
-      component = isParameterObjectType(component) ? component : null;
-      break;
-
-    case 'examples':
-      component = isExampleObjectType(component) ? component : null;
-      break;
-
-    case 'requestBodies':
-      component = isRequestBodyObjectType(component) ? component : null;
-      break;
-
-    case 'headers':
-      component = isHeaderObjectType(component) ? component : null;
-      break;
-
-    case 'securitySchemes':
-      component = isSecuritySchemeObjectType(component) ? component : null;
-      break;
-
-    case 'links':
-      component = isLinkObjectType(component) ? component : null;
-      break;
-
-    case 'callbacks':
-      component = isCallbackObjectType(component) ? component : null;
-      break;
-
-    default:
   }
 
   return component;
@@ -97,7 +56,6 @@ const parsePathItem = function (
     // "/allUsers": { get: {} }
     if (!isOperationType(operation)) continue
     const temp = parseOperation(path, operationType, operation)
-    console.log({ temp }) 
     parsed.push(temp)
   }
 
@@ -119,7 +77,7 @@ const parseOperation = function (
   ];
 
   let delta : Object = {}
-  for( delta in values )
+  for( delta of values )
   requestObject = { ...requestObject, ...delta }
   
 	return requestObject;
@@ -197,13 +155,6 @@ const parseParams = function (
   return { params : result }
 }
 
-const parameters  ={
-  examples : {
-    "kutteKaNaam" : {/* Reference  Object */},
-  }
-}
-
-Object.values(parameters.examples)
 // [ {/* Reference  Object */}, {/* Example  Object */}]
 
 // parameterObject.examples = {
