@@ -313,3 +313,43 @@ export default function (filecontent: OpenAPIV3.Document) {
 //     ]
 //   }
 // ]
+
+
+
+// [
+//   {
+//     "path":"/pets",
+//     "contentType":"",
+//     "method":"GET",
+//     "params":
+//     [
+//       {
+//         "key":"tags",
+//         "active":true,
+//         "value":""
+//       },
+//       {
+//         "key":"limit",
+//         "active":true,
+//         "value":""
+//       }
+//     ]
+//   },
+//   {
+//     "path":"/pets",
+//     "contentType":"application/json",
+//     "method":"POST"
+//   },
+//   {
+//     "path":"/pets/{id}",
+//     "contentType":"",
+//     "method":"GET",
+//     "params":[]
+//   },
+//   {
+//     "path":"/pets/{id}",
+//     "contentType":"",
+//     "method":"DELETE",
+//     "params":[]
+//   }
+// ]
