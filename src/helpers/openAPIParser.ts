@@ -79,7 +79,6 @@ const parseOperation = function (
   let delta : Object = {}
   for( delta of values )
   requestObject = { ...requestObject, ...delta }
-  
 	return requestObject;
 } 
 
@@ -105,7 +104,8 @@ const parsePath = function (
 const parseMethod = function (
   operationType: String
 ) {
-  return { "method" : operationType.toUpperCase() }
+  const pathValue = operationType.replaceAll(/{([^}]+)}/g, '<<$1>>');
+  return { "method" : pathValue.toUpperCase() }
 }
 
 const parseSummary = function (
@@ -128,12 +128,16 @@ const parseParams = function (
 
   const result = parameters
     .filter((p) : p is OpenAPIV3.ParameterObject => true)
-    .filter(p => p.in === 'query')
+    .filter(p => ( p.in === 'query' || p.in === 'path'))
     .map(p => {
-      const temp = {
+      const temp : any = {
         key : p.name,
         active : true,
         value: ""
+      }
+
+      if (p.in === 'path') {
+        temp.type = 'path'
       }
       
       if (p.example) {
@@ -287,6 +291,12 @@ export default function (filecontent: OpenAPIV3.Document) {
 //           {
 //             "key": "user",
 //             "value": "",
+//             "active": true
+//           },
+//           {
+//             "key": "user",
+//             "value": "",
+//             "type": "path",
 //             "active": true
 //           }
 //         ],
