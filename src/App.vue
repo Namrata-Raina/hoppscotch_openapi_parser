@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import Parser from './helpers/openAPIParser';
+import Parser from './openAPIParser/Parser';
 export default {
   name: 'App',
   components: {
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     submit(){
-      this.outputvalue = JSON.stringify(Parser(JSON.parse(this.inputvalue)));
+      this.outputvalue = JSON.stringify(Parser(JSON.parse(this.inputvalue)).parse());
     }
   }
 }
