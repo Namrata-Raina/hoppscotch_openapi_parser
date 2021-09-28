@@ -138,7 +138,7 @@ export class OpenAPIParser {
   }
 
   parsePath (path: string) : string {
-    const pathValue = path.replaceAll(/{([^}]+)}/g, "<<$1>>")
+    const pathValue = path.replace(/{([^}]+)}/g, "<<$1>>")
     return pathValue
   }
 
