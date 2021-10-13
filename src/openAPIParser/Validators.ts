@@ -19,7 +19,7 @@ export const isReferenceObjectType = (
 
 export const isMediaTypeObject = (
   object: any
-): object is OpenAPIV3.MediaTypeObject => object.example || object.examples || object.schema
+): object is OpenAPIV3.MediaTypeObject => typeof(object) !== "undefined" && object && ( object.example || object.examples || object.schema )
 
 export type ComponentTypes = "schemas"
 | "responses"
